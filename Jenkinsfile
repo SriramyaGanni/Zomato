@@ -7,17 +7,17 @@ pipeline {
     }
 
     environment {
-        DOCKER_IMAGE = "rajeshtutta123/zomato"
-        AWS_REGION = "us-east-1"
+        DOCKER_IMAGE = "sriramyaganni/zomato"
+        AWS_REGION = "ap-south-1"
         CLUSTER_NAME = "mycluster"
-        RECIPIENTS = "rajeshtutta123@gmail.com"
+        RECIPIENTS = "gannisriramya26@gmail.com"
     }
 
     stages {
 
         stage('Clone Repo') {
             steps {
-                git branch: 'main', url: 'https://github.com/rajeshtutta/zomato.git'
+                git branch: 'main', url: 'https://github.com/SriramyaGanni/Zomato.git'
             }
         }
 
@@ -73,14 +73,14 @@ pipeline {
         stage('Upload to Nexus') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'nexus-cred',
+                    credentialsId: 'Nexus-creds',
                     usernameVariable: 'NEXUS_USER',
                     passwordVariable: 'NEXUS_PASS'
                 )]) {
                     sh '''
                     curl -v -u $NEXUS_USER:$NEXUS_PASS \
                     --upload-file zomato-build.zip \
-                    http://localhost:8081/repository/raw-hosted/zomato-build-${BUILD_NUMBER}.zip
+                    http://localhost:8081/repository/Zomato/zomato-build-${BUILD_NUMBER}.zip
                     '''
                 }
             }
@@ -98,7 +98,7 @@ pipeline {
         stage('Docker Push') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-cred',
+                    credentialsId: 'dockerhub',
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]) {
